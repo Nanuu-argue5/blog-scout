@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Vida Scout - Blog Personal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --campfire-orange: #FF8C42;
+            --sky-blue: #87CEEB;
+            --earth-brown: #D2B48C;
+            --pure-white: #FFFFFF;
+            --dark-brown: #8B4513;
+            --forest-green: #228B22;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--earth-brown) 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header con estética scout */
+        .header {
+            background: linear-gradient(90deg, var(--dark-brown) 0%, var(--campfire-orange) 100%);
+            color: var(--pure-white);
+            padding: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 Q70,80 90,50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--pure-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--campfire-orange);
+            color: var(--pure-white);
+            border: 2px solid var(--campfire-orange);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--pure-white);
+            border: 2px solid var(--pure-white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--pure-white);
+            color: var(--campfire-orange);
+        }
+
+        .btn-secondary:hover {
+            background: var(--pure-white);
+            color: var(--dark-brown);
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Formulario de login */
+        .login-form {
+            background: var(--pure-white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            border: 3px solid var(--earth-brown);
+            position: relative;
+        }
+
+        .login-form::before {
+            content: '🏕️';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--campfire-orange);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-brown);
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--earth-brown);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--campfire-orange);
+            box-shadow: 0 0 10px rgba(255, 140, 66, 0.3);
+        }
+
+        /* Panel de administración */
+        .admin-panel {
+            display: none;
+            background: var(--pure-white);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid var(--sky-blue);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--earth-brown);
+        }
+
+        .new-post-form {
+            background: var(--earth-brown);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .new-post-form h3 {
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--pure-white);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Blog posts */
+        .blog-posts {
+            display: grid;
+            gap: 30px;
+        }
+
+        .post {
+            background: var(--pure-white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid var(--earth-brown);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .post-header {
+            background: linear-gradient(135deg, var(--sky-blue), var(--campfire-orange));
+            padding: 25px;
+            color: var(--pure-white);
+            position: relative;
+        }
+
+        .post-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--pure-white);
+            clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+        }
+
+        .post-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.9;
+        }
+
+        .post-content {
+            padding: 30px;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid var(--earth-brown);
+        }
+
+        .post-text {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--campfire-orange);
+            color: var(--pure-white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Pantalla de bienvenida */
+        .welcome-screen {
+            text-align: center;
+            background: var(--pure-white);
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 3px solid var(--sky-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--sky-blue) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.1;
+            animation: drift 20s linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: rotate(0deg) translate(0, 0); }
+            100% { transform: rotate(360deg) translate(30px, 30px); }
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            color: var(--dark-brown);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .welcome-subtitle {
+            font-size: 1.3rem;
+            color: var(--campfire-orange);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .welcome-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .scout-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            font-size: 3rem;
+        }
+
+        .scout-icon {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scout-icon:nth-child(2) { animation-delay: 0.5s; }
+        .scout-icon:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Estados ocultos */
+        .hidden { display: none; }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .logo p {
+                font-size: 0.8rem !important;
+            }
+
+            .nav-buttons {
+                justify-content: center;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .scout-icons {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🏕️</div>
+                <div>
+                    <h1>Mi Vida Scout</h1>
+                    <p style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9; font-weight: normal;">
+                        Grupo Scout Impeesa N° 1610 Mendiolaza - Distrito 2 - Zona 42
+                    </p>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="loginBtn">Acceder</button>
+                <button class="btn btn-primary hidden" id="logoutBtn">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Pantalla de bienvenida -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-content">
+                <h2 class="welcome-title">¡Bienvenido a Mi Aventura Scout!</h2>
+                <p class="welcome-subtitle">Siempre Listo para Nuevas Aventuras</p>
+                <p class="welcome-description">
+                    Este es mi espacio personal donde comparto todas las experiencias, aventuras y aprendizajes 
+                    de mi vida como scout. Desde campamentos bajo las estrellas hasta actividades comunitarias, 
+                    aquí encontrarás historias que inspiran el espíritu scout de hermandad, naturaleza y servicio.
+                </p>
+                <div class="scout-icons">
+                    <span class="scout-icon">🔥</span>
+                    <span class="scout-icon">🌲</span>
+                    <span class="scout-icon">⭐</span>
+                </div>
+                <p style="color: var(--dark-brown); font-weight: bold; margin-top: 30px;">
+                    🏕️ Inicia sesión para acceder al contenido completo del blog
+                </p>
+            </div>
+        </div>
+
+        <!-- Formulario de login -->
+        <div class="login-form hidden" id="loginForm">
+            <h2 style="text-align: center; color: var(--dark-brown); margin-bottom: 30px; margin-top: 20px;">
+                Acceso Scout
+            </h2>
+            <form id="loginFormElement">
+                <div class="form-group">
+                    <label for="username">Usuario:</label>
+                    <input type="text" id="username" name="username" required placeholder="Ingresa tu nombre de usuario">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required placeholder="Ingresa tu contraseña">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    🏕️ Entrar al Campamento
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
+                Usuario: <strong>scout</strong> | Contraseña: <strong>aventura2024</strong>
+            </p>
+        </div>
+
+        <!-- Panel de administración -->
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-header">
+                <h2 style="color: var(--dark-brown);">🏕️ Panel de Administración Scout</h2>
+                <span style="color: var(--campfire-orange); font-weight: bold;">¡Siempre Listo!</span>
+            </div>
+
+            <div class="new-post-form">
+                <h3>📝 Nueva Historia Scout</h3>
+                <form id="newPostForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postTitle">Título de la Aventura:</label>
+                            <input type="text" id="postTitle" required placeholder="Ej: Campamento de Verano 2024">
+                        </div>
+                        <div class="form-group">
+                            <label for="postDate">Fecha:</label>
+                            <input type="date" id="postDate" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="postImage">URL de Imagen (opcional):</label>
+                        <input type="url" id="postImage" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
+                    <div class="form-group">
+                        <label for="postContent">Contenido:</label>
+                        <textarea id="postContent" required placeholder="Cuenta tu aventura scout..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="postTags">Etiquetas (separadas por comas):</label>
+                        <input type="text" id="postTags" placeholder="campamento, aventura, naturaleza">
+                    </div>
+                    <button type="submit" class="btn btn-primary">🔥 Publicar Historia</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Posts del blog -->
+        <div class="blog-posts" id="blogPosts"></div>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        let isLoggedIn = false;
+        let blogPosts = [
+            {
+                id: 1,
+                title: "Mi Primer Campamento Scout",
+                date: "2024-03-15",
+                content: "Fue una experiencia increíble. Aprendí a hacer fuego, armar carpas y lo más importante, el valor de trabajar en equipo. Las noches bajo las estrellas fueron mágicas, compartiendo historias alrededor de la fogata.",
+                image: "",
+                tags: ["campamento", "primer-vez", "naturaleza"],
+                author: "Scout Aventurero"
+            },
+            {
+                id: 2,
+                title: "Caminata por el Sendero del Cóndor",
+                date: "2024-04-22",
+                content: "Una caminata desafiante de 12 kilómetros por las montañas. El paisaje era espectacular y pudimos observar cóndores en su hábitat natural. Esta experiencia me enseñó sobre perseverancia y respeto por la naturaleza.",
+                image: "",
+                tags: ["caminata", "montaña", "fauna"],
+                author: "Scout Aventurero"
+            },
+            {
+                id: 3,
+                title: "Proyecto Comunitario: Limpieza del Río",
+                date: "2024-05-10",
+                content: "Organizamos una jornada de limpieza del río local junto con otros grupos scouts. Recolectamos más de 50 bolsas de basura y plantamos árboles nativos. Fue gratificante ver el impacto positivo en nuestra comunidad.",
+                image: "",
+                tags: ["servicio", "comunidad", "medio-ambiente"],
+                author: "Scout Aventurero"
+            }
+        ];
+
+        // Referencias DOM
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const loginForm = document.getElementById('loginForm');
+        const adminPanel = document.getElementById('adminPanel');
+        const blogPostsContainer = document.getElementById('blogPosts');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginFormElement = document.getElementById('loginFormElement');
+        const newPostForm = document.getElementById('newPostForm');
+
+        // Event listeners
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showLoginForm();
+        });
+        
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+        
+        loginFormElement.addEventListener('submit', handleLogin);
+        newPostForm.addEventListener('submit', handleNewPost);
+
+        function showLoginForm() {
+            welcomeScreen.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        }
+
+        function showWelcome() {
+            welcomeScreen.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            adminPanel.classList.add('hidden');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Credenciales de prueba
+            if (username === 'scout' && password === 'aventura2024') {
+                isLoggedIn = true;
+                loginForm.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                renderBlogPosts();
+            } else {
+                alert('❌ Credenciales incorrectas. Intenta con:\nUsuario: scout\nContraseña: aventura2024');
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            adminPanel.classList.add('hidden');
+            blogPostsContainer.innerHTML = '';
+            loginBtn.classList.remove('hidden');
+            logoutBtn.classList.add('hidden');
+            showWelcome();
+            
+            // Limpiar formularios
+            document.getElementById('loginFormElement').reset();
+            document.getElementById('newPostForm').reset();
+        }
+
+        function handleNewPost(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('postTitle').value;
+            const date = document.getElementById('postDate').value;
+            const content = document.getElementById('postContent').value;
+            const image = document.getElementById('postImage').value;
+            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+            const newPost = {
+                id: blogPosts.length + 1,
+                title,
+                date,
+                content,
+                image,
+                tags,
+                author: "Scout Aventurero"
+            };
+
+            blogPosts.unshift(newPost);
+            renderBlogPosts();
+            newPostForm.reset();
+            
+            // Animación de confirmación
+            const submitBtn = newPostForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '✅ ¡Publicado!';
+            submitBtn.style.background = 'var(--forest-green)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = '';
+            }, 2000);
+        }
+
+        function renderBlogPosts() {
+            if (!isLoggedIn) return;
+
+            blogPostsContainer.innerHTML = blogPosts.map(post => `
+                <article class="post">
+                    <div class="post-header">
+                        <h2 class="post-title">${post.title}</h2>
+                        <div class="post-meta">
+                            <span>📅 ${formatDate(post.date)}</span>
+                            <span>✍️ ${post.author}</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image" onerror="this.style.display='none'">` : ''}
+                        <div class="post-text">${post.content}</div>
+                        ${post.tags.length > 0 ? `
+                            <div class="post-tags">
+                                ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        // Establecer fecha actual por defecto
+        document.getElementById('postDate').valueAsDate = new Date();
+
+        // Inicialización
+        showWelcome();
+    </script>
+</body>
+</html>
