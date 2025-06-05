@@ -461,6 +461,7 @@
             </div>
             <div class="nav-buttons">
                 <button class="btn btn-secondary" id="loginBtn">Acceder</button>
+                <button class="btn btn-secondary" id="specialLoginBtn">Acceso Especial</button>
                 <button class="btn btn-primary hidden" id="logoutBtn">Cerrar Sesión</button>
             </div>
         </div>
@@ -488,6 +489,31 @@
             </div>
         </div>
 
+        <!-- Formulario de login especial -->
+        <div class="login-form hidden" id="specialLoginForm">
+            <h2 style="text-align: center; color: var(--dark-brown); margin-bottom: 30px; margin-top: 20px;">
+                🌟 Acceso Especial Scout
+            </h2>
+            <form id="specialLoginFormElement">
+                <div class="form-group">
+                    <label for="specialUsername">Usuario Especial:</label>
+                    <input type="text" id="specialUsername" name="specialUsername" required placeholder="Ingresa tu usuario especial">
+                </div>
+                <div class="form-group">
+                    <label for="specialPassword">Contraseña Especial:</label>
+                    <input type="password" id="specialPassword" name="specialPassword" required placeholder="Ingresa tu contraseña especial">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    ✨ Acceso Total
+                </button>
+            </form>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-secondary" id="backToWelcomeSpecial" style="font-size: 0.9rem;">
+                    ← Volver al inicio
+                </button>
+            </div>
+        </div>
+
         <!-- Formulario de login -->
         <div class="login-form hidden" id="loginForm">
             <h2 style="text-align: center; color: var(--dark-brown); margin-bottom: 30px; margin-top: 20px;">
@@ -509,6 +535,11 @@
             <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
                 Usuario: <strong>scout</strong> | Contraseña: <strong>aventura2024</strong>
             </p>
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="btn btn-secondary" id="backToWelcome" style="font-size: 0.9rem;">
+                    ← Volver al inicio
+                </button>
+            </div>
         </div>
 
         <!-- Panel de administración -->
@@ -555,32 +586,33 @@
     <script>
         // Estado de la aplicación
         let isLoggedIn = false;
+        let isSpecialUser = false;
         let blogPosts = [
             {
                 id: 1,
-                title: "Mi Primer Campamento Scout",
-                date: "2024-03-15",
-                content: "Fue una experiencia increíble. Aprendí a hacer fuego, armar carpas y lo más importante, el valor de trabajar en equipo. Las noches bajo las estrellas fueron mágicas, compartiendo historias alrededor de la fogata.",
+                title: "Mi Primera Vez Como Scout",
+                date: "2019-03-15",
+                content: "Mi primera vez como scout fue en el grupo Mandela a los 7 años en el 2019. Fue una experiencia increíble que marcó el inicio de mi aventura scout. Aprendí los valores fundamentales del escultismo y conocí a compañeros que se convirtieron en hermanos.",
                 image: "",
-                tags: ["campamento", "primer-vez", "naturaleza"],
+                tags: ["primer-vez", "grupo-mandela", "inicio"],
                 author: "Scout Aventurero"
             },
             {
                 id: 2,
-                title: "Caminata por el Sendero del Cóndor",
+                title: "Unidad Scout Patrulla Vizcacha",
                 date: "2024-04-22",
-                content: "Una caminata desafiante de 12 kilómetros por las montañas. El paisaje era espectacular y pudimos observar cóndores en su hábitat natural. Esta experiencia me enseñó sobre perseverancia y respeto por la naturaleza.",
+                content: "Una experiencia increíble junto a mi Patrulla Vizcacha. Participamos en diversas actividades que fortalecieron nuestros lazos de hermandad. La Patrulla Vizcacha siempre demostró su espíritu de aventura y compañerismo en cada actividad que realizamos juntos.",
                 image: "",
-                tags: ["caminata", "montaña", "fauna"],
-                author: "Scout Aventurero"
+                tags: ["patrulla-vizcacha", "unidad-scout", "hermandad"],
+                author: "Scout Aventurero - Patrulla Vizcacha"
             },
             {
                 id: 3,
-                title: "Proyecto Comunitario: Limpieza del Río",
-                date: "2024-05-10",
-                content: "Organizamos una jornada de limpieza del río local junto con otros grupos scouts. Recolectamos más de 50 bolsas de basura y plantamos árboles nativos. Fue gratificante ver el impacto positivo en nuestra comunidad.",
+                title: "Proyecto Nuevo Scout",
+                date: "2024-04-20",
+                content: "Se trata sobre la separación de un grupo scout que hicieron uno nuevo en abril día sábado 20 en el 2024. Fue un momento importante en la historia del escultismo local, donde nuevos líderes decidieron formar su propio grupo para continuar la tradición scout con una nueva visión y energía renovada.",
                 image: "",
-                tags: ["servicio", "comunidad", "medio-ambiente"],
+                tags: ["nuevo-grupo", "separacion", "proyecto"],
                 author: "Scout Aventurero"
             }
         ];
@@ -588,35 +620,64 @@
         // Referencias DOM
         const welcomeScreen = document.getElementById('welcomeScreen');
         const loginForm = document.getElementById('loginForm');
+        const specialLoginForm = document.getElementById('specialLoginForm');
         const adminPanel = document.getElementById('adminPanel');
         const blogPostsContainer = document.getElementById('blogPosts');
         const loginBtn = document.getElementById('loginBtn');
+        const specialLoginBtn = document.getElementById('specialLoginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const loginFormElement = document.getElementById('loginFormElement');
+        const specialLoginFormElement = document.getElementById('specialLoginFormElement');
         const newPostForm = document.getElementById('newPostForm');
+        const backToWelcome = document.getElementById('backToWelcome');
+        const backToWelcomeSpecial = document.getElementById('backToWelcomeSpecial');
 
         // Event listeners
         loginBtn.addEventListener('click', function(e) {
             e.preventDefault();
             showLoginForm();
         });
+
+        specialLoginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showSpecialLoginForm();
+        });
         
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             logout();
         });
+
+        backToWelcome.addEventListener('click', function(e) {
+            e.preventDefault();
+            showWelcome();
+        });
+
+        backToWelcomeSpecial.addEventListener('click', function(e) {
+            e.preventDefault();
+            showWelcome();
+        });
         
         loginFormElement.addEventListener('submit', handleLogin);
+        specialLoginFormElement.addEventListener('submit', handleSpecialLogin);
         newPostForm.addEventListener('submit', handleNewPost);
 
         function showLoginForm() {
             welcomeScreen.classList.add('hidden');
             loginForm.classList.remove('hidden');
+            specialLoginForm.classList.add('hidden');
+        }
+
+        function showSpecialLoginForm() {
+            welcomeScreen.classList.add('hidden');
+            loginForm.classList.add('hidden');
+            specialLoginForm.classList.remove('hidden');
         }
 
         function showWelcome() {
             welcomeScreen.classList.remove('hidden');
             loginForm.classList.add('hidden');
+            specialLoginForm.classList.add('hidden');
             adminPanel.classList.add('hidden');
         }
 
@@ -628,26 +689,53 @@
             // Credenciales de prueba
             if (username === 'scout' && password === 'aventura2024') {
                 isLoggedIn = true;
+                isSpecialUser = false;
                 loginForm.classList.add('hidden');
                 adminPanel.classList.remove('hidden');
                 loginBtn.classList.add('hidden');
+                specialLoginBtn.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
                 renderBlogPosts();
+                updateAdminPanel();
             } else {
                 alert('❌ Credenciales incorrectas. Intenta con:\nUsuario: scout\nContraseña: aventura2024');
             }
         }
 
+        function handleSpecialLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('specialUsername').value;
+            const password = document.getElementById('specialPassword').value;
+
+            // Credenciales especiales
+            if (username === 'nanuu-argue5' && password === '202024') {
+                isLoggedIn = true;
+                isSpecialUser = true;
+                specialLoginForm.classList.add('hidden');
+                adminPanel.classList.remove('hidden');
+                loginBtn.classList.add('hidden');
+                specialLoginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                renderBlogPosts();
+                updateAdminPanel();
+            } else {
+                alert('❌ Credenciales especiales incorrectas.');
+            }
+        }
+
         function logout() {
             isLoggedIn = false;
+            isSpecialUser = false;
             adminPanel.classList.add('hidden');
             blogPostsContainer.innerHTML = '';
             loginBtn.classList.remove('hidden');
+            specialLoginBtn.classList.remove('hidden');
             logoutBtn.classList.add('hidden');
             showWelcome();
             
             // Limpiar formularios
             document.getElementById('loginFormElement').reset();
+            document.getElementById('specialLoginFormElement').reset();
             document.getElementById('newPostForm').reset();
         }
 
@@ -667,7 +755,7 @@
                 content,
                 image,
                 tags,
-                author: "Scout Aventurero"
+                author: isSpecialUser ? "Usuario Especial - nanuu-argue5" : "Scout Aventurero"
             };
 
             blogPosts.unshift(newPost);
@@ -684,6 +772,21 @@
                 submitBtn.textContent = originalText;
                 submitBtn.style.background = '';
             }, 2000);
+        }
+
+        function updateAdminPanel() {
+            const adminHeader = document.querySelector('.admin-header h2');
+            const adminSubtitle = document.querySelector('.admin-header span');
+            
+            if (isSpecialUser) {
+                adminHeader.textContent = '🌟 Panel Especial - Acceso Total';
+                adminSubtitle.textContent = '¡Administrador Especial!';
+                adminSubtitle.style.color = 'var(--forest-green)';
+            } else {
+                adminHeader.textContent = '🏕️ Panel de Administración Scout';
+                adminSubtitle.textContent = '¡Siempre Listo!';
+                adminSubtitle.style.color = 'var(--campfire-orange)';
+            }
         }
 
         function renderBlogPosts() {
